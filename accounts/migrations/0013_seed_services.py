@@ -49,7 +49,7 @@ def remove_services(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0012_previous_migration_name_here'),
+    ('accounts', '0012_alter_payment_payment_method'),
     ]
 
     operations = [
