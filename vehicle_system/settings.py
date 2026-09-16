@@ -20,14 +20,29 @@ load_dotenv(BASE_DIR / '.env')
 # SECURITY
 # ---------------------------------------------------------
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-local-development-key')
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    'django-insecure-local-development-key'
+)
 
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    for host in os.getenv(
+        'ALLOWED_HOSTS',
+        'localhost,127.0.0.1'
+    ).split(',')
     if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        'CSRF_TRUSTED_ORIGINS',
+        ''
+    ).split(',')
+    if origin.strip()
 ]
 
 
@@ -52,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -118,16 +134,24 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator',
     },
 ]
 
@@ -153,6 +177,16 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND':
+            'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
 
 # ---------------------------------------------------------
 # MEDIA FILES
@@ -175,11 +209,20 @@ AUTH_USER_MODEL = 'accounts.User'
 # RAZORPAY TEST MODE
 # ---------------------------------------------------------
 
-RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', 'rzp_test_Tcc1WQtklYdZUb')
+RAZORPAY_KEY_ID = os.getenv(
+    'RAZORPAY_KEY_ID',
+    'rzp_test_Tcc1WQtklYdZUb'
+)
 
-RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', 'IYwhZ1jb0d8rIXkRyBZ3dXZ1')
+RAZORPAY_KEY_SECRET = os.getenv(
+    'RAZORPAY_KEY_SECRET',
+    'IYwhZ1jb0d8rIXkRyBZ3dXZ1'
+)
 
-RAZORPAY_CURRENCY = os.getenv('RAZORPAY_CURRENCY', 'INR')
+RAZORPAY_CURRENCY = os.getenv(
+    'RAZORPAY_CURRENCY',
+    'INR'
+)
 
 
 # ---------------------------------------------------------
@@ -187,7 +230,10 @@ RAZORPAY_CURRENCY = os.getenv('RAZORPAY_CURRENCY', 'INR')
 # ---------------------------------------------------------
 
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = (
+        'HTTP_X_FORWARDED_PROTO',
+        'https'
+    )
 
     SECURE_SSL_REDIRECT = True
 
