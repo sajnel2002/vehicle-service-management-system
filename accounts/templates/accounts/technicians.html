@@ -1,0 +1,341 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+Technicians | Vehicle Service Management System
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .technicians-page {
+        padding: 10px 0 40px;
+    }
+
+    .technicians-heading {
+        margin-bottom: 25px;
+    }
+
+    .technicians-heading h1 {
+        margin: 5px 0 8px;
+        color: #0f172a;
+        font-size: clamp(28px, 4vw, 38px);
+    }
+
+    .technicians-heading p:last-child {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .technicians-panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+    }
+
+    .panel-header {
+        padding: 20px 22px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .panel-header h2 {
+        margin: 0 0 5px;
+        color: #0f172a;
+        font-size: 20px;
+    }
+
+    .panel-header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .technicians-table {
+        width: 100%;
+        min-width: 650px;
+        border-collapse: collapse;
+    }
+
+    .technicians-table th {
+        padding: 15px 18px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        color: #475569;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .technicians-table td {
+        padding: 18px;
+        border-bottom: 1px solid #eef2f7;
+        color: #334155;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .technicians-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    .technician-name {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .technician-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #eff6ff;
+        color: #1d4ed8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .phone {
+        color: #475569;
+    }
+
+    .specialization {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1e40af;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .internal-note {
+        margin: 20px 22px 0;
+        padding: 13px 15px;
+        border: 1px solid #dbeafe;
+        border-radius: 10px;
+        background: #f8fbff;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .internal-note strong {
+        color: #1e3a8a;
+    }
+
+    .empty-state {
+        padding: 65px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: #eff6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1d4ed8;
+        font-size: 28px;
+    }
+
+    .empty-state h2 {
+        margin: 0 0 8px;
+        color: #0f172a;
+        font-size: 21px;
+    }
+
+    .empty-state p {
+        max-width: 500px;
+        margin: 0 auto 20px;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+
+        .technicians-page {
+            padding: 5px 0 30px;
+        }
+
+        .technicians-heading h1 {
+            font-size: 29px;
+        }
+
+        .technicians-panel {
+            border-radius: 14px;
+        }
+
+        .panel-header {
+            padding: 18px;
+        }
+
+        .internal-note {
+            margin: 16px;
+        }
+    }
+</style>
+
+
+<section class="technicians-page">
+
+    <!-- Page Heading -->
+    <section class="technicians-heading">
+
+        <p class="eyebrow">
+            Workshop Team
+        </p>
+
+        <h1>
+            Technicians
+        </h1>
+
+        <p>
+            Internal workshop technicians available for service assignments.
+        </p>
+
+    </section>
+
+
+    <!-- Technicians Panel -->
+    <section class="technicians-panel">
+
+        {% if technicians %}
+
+            <div class="panel-header">
+
+                <h2>
+                    Workshop Team
+                </h2>
+
+                <p>
+                    Technician information is maintained internally for workshop operations.
+                </p>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table class="technicians-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Specialization</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for technician in technicians %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="technician-name">
+
+                                    <span class="technician-avatar">
+                                        🧑‍🔧
+                                    </span>
+
+                                    <span>
+                                        {{ technician.name }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="phone">
+                                    {{ technician.phone }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="specialization">
+                                    {{ technician.specialization }}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="internal-note">
+
+                <strong>Internal workshop information:</strong>
+                Technician assignments are handled as part of the workshop's internal service process.
+
+            </div>
+
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    🧑‍🔧
+                </div>
+
+                <h2>
+                    No Technicians Have Been Added
+                </h2>
+
+                <p>
+                    Add your workshop team through Django administration when technicians are available.
+                </p>
+
+                <a
+                    class="button"
+                    href="{% url 'dashboard' %}"
+                >
+                    Back to Dashboard
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</section>
+
+{% endblock %}

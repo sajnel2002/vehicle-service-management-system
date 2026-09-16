@@ -1,0 +1,498 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Job Cards | Vehicle Service Management System{% endblock %}
+
+{% block content %}
+
+<style>
+    .jobcards-page {
+        padding: 10px 0 40px;
+    }
+
+    .jobcards-heading {
+        margin-bottom: 25px;
+    }
+
+    .jobcards-heading h1 {
+        margin: 5px 0 8px;
+        color: #0f172a;
+        font-size: clamp(28px, 4vw, 38px);
+    }
+
+    .jobcards-heading p:last-child {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .jobcards-panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+    }
+
+    .panel-header {
+        padding: 20px 22px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .panel-header h2 {
+        margin: 0 0 5px;
+        color: #0f172a;
+        font-size: 20px;
+    }
+
+    .panel-header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .jobcards-table {
+        width: 100%;
+        min-width: 850px;
+        border-collapse: collapse;
+    }
+
+    .jobcards-table th {
+        padding: 15px 17px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        color: #475569;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        white-space: nowrap;
+    }
+
+    .jobcards-table td {
+        padding: 18px 17px;
+        border-bottom: 1px solid #eef2f7;
+        color: #334155;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .jobcards-table tbody tr {
+        transition: background .15s ease;
+    }
+
+    .jobcards-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    .job-id {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-weight: 800;
+        font-size: 13px;
+    }
+
+    .customer-name {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .vehicle-number {
+        display: block;
+        margin-top: 4px;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .service-name {
+        color: #1e293b;
+        font-weight: 600;
+    }
+
+    .technician-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: #f0fdf4;
+        color: #166534;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .technician-status.not-assigned {
+        background: #fff7ed;
+        color: #9a3412;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .cost-box {
+        white-space: nowrap;
+    }
+
+    .estimated-cost {
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .final-cost {
+        display: block;
+        margin-top: 4px;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-open {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-in_progress {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .empty-state {
+        padding: 65px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: #eff6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1d4ed8;
+        font-size: 28px;
+    }
+
+    .empty-state h2 {
+        margin: 0 0 8px;
+        color: #0f172a;
+        font-size: 21px;
+    }
+
+    .empty-state p {
+        max-width: 500px;
+        margin: 0 auto 20px;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+        .jobcards-page {
+            padding: 5px 0 30px;
+        }
+
+        .jobcards-heading h1 {
+            font-size: 29px;
+        }
+
+        .jobcards-panel {
+            border-radius: 14px;
+        }
+
+        .panel-header {
+            padding: 18px;
+        }
+    }
+</style>
+
+
+<section class="jobcards-page">
+
+    <!-- Page Heading -->
+    <section class="jobcards-heading">
+
+        <p class="eyebrow">
+            Workshop Control
+        </p>
+
+        <h1>
+            Job Cards
+        </h1>
+
+        <p>
+            Track service work, technician assignment, estimated costs and completion status.
+        </p>
+
+    </section>
+
+
+    <!-- Job Cards Panel -->
+    <section class="jobcards-panel">
+
+        {% if jobcards %}
+
+            <div class="panel-header">
+
+                <h2>
+                    Service Job Cards
+                </h2>
+
+                <p>
+                    Monitor the current progress of customer service requests.
+                </p>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table class="jobcards-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Job</th>
+
+                            <th>Customer & Vehicle</th>
+
+                            <th>Service</th>
+
+                            <th>Technician</th>
+
+                            <th>Estimated / Final</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for jobcard in jobcards %}
+
+                        <tr>
+
+                            <!-- Job -->
+                            <td>
+
+                                <span class="job-id">
+                                    #{{ jobcard.id }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Customer & Vehicle -->
+                            <td>
+
+                                <span class="customer-name">
+                                    {{ jobcard.booking.customer.username }}
+                                </span>
+
+                                <span class="vehicle-number">
+                                    🚗 {{ jobcard.booking.vehicle.vehicle_number }}
+
+                                    {% if jobcard.booking.vehicle.vehicle_model %}
+                                        · {{ jobcard.booking.vehicle.vehicle_model }}
+                                    {% endif %}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Service -->
+                            <td>
+
+                                <span class="service-name">
+                                    {{ jobcard.booking.service.name }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Technician -->
+                            <td>
+
+                                {% if jobcard.booking.status == 'CONFIRMED' %}
+
+                                    <span class="technician-status">
+                                        <span class="status-dot"></span>
+                                        Assigned
+                                    </span>
+
+                                {% elif jobcard.booking.status == 'IN_PROGRESS' %}
+
+                                    <span class="technician-status">
+                                        <span class="status-dot"></span>
+                                        Assigned
+                                    </span>
+
+                                {% elif jobcard.booking.status == 'COMPLETED' %}
+
+                                    <span class="technician-status">
+                                        <span class="status-dot"></span>
+                                        Assigned
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="technician-status not-assigned">
+                                        <span class="status-dot"></span>
+                                        Not Assigned
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Costs -->
+                            <td>
+
+                                <div class="cost-box">
+
+                                    <span class="estimated-cost">
+                                        Estimated: ₹{{ jobcard.estimated_cost }}
+                                    </span>
+
+                                    <span class="final-cost">
+                                        Final: ₹{{ jobcard.final_cost }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td>
+
+                                {% if jobcard.status == 'OPEN' %}
+
+                                    <span class="status-badge status-open">
+                                        Open
+                                    </span>
+
+                                {% elif jobcard.status == 'IN_PROGRESS' %}
+
+                                    <span class="status-badge status-in_progress">
+                                        In Progress
+                                    </span>
+
+                                {% elif jobcard.status == 'COMPLETED' %}
+
+                                    <span class="status-badge status-completed">
+                                        Completed
+                                    </span>
+
+                                {% elif jobcard.status == 'PENDING' %}
+
+                                    <span class="status-badge status-pending">
+                                        Pending
+                                    </span>
+
+                                {% elif jobcard.status == 'CANCELLED' %}
+
+                                    <span class="status-badge status-cancelled">
+                                        Cancelled
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge">
+                                        {{ jobcard.get_status_display }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ▤
+                </div>
+
+                <h2>
+                    No Job Cards Yet
+                </h2>
+
+                <p>
+                    Job cards will appear here as service requests move through the workshop workflow.
+                </p>
+
+                <a
+                    class="button"
+                    href="{% url 'all_bookings' %}"
+                >
+                    View Bookings
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</section>
+
+{% endblock %}

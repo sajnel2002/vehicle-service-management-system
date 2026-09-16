@@ -1,0 +1,43 @@
+{% extends 'accounts/base.html' %}{% block title %}My Vehicles | Vehicle Service Management System{% endblock %}{% block content %}<section class="page-heading"><p class="eyebrow">Your garage</p><h1>My vehicles</h1><p>Vehicles are automatically saved whenever you book a service.</p></section><section class="panel table-wrap">{% if vehicles %}<table><thead><tr><th>Registration</th><th>Model</th><th>Type</th><th>Year</th></tr></thead><tbody>{% for vehicle in vehicles %}<tr><td><strong>{{ vehicle.vehicle_number }}</strong></td><td>{{ vehicle.vehicle_model }}</td><td>{{ vehicle.vehicle_type }}</td><td>{{ vehicle.year }}</td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty-state"><span class="empty-icon">▱</span><h2>No vehicles yet</h2><p>Your vehicle will be saved once you create your first appointment.</p><a class="button" href="{% url 'create_booking' %}">Book a service</a></div>{% endif %}</section>{% endblock %}{% comment %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Vehicles</title>
+</head>
+<body>
+
+    <h1>My Vehicles 🚗</h1>
+
+    <a href="/dashboard/">← Back to Dashboard</a>
+
+    <hr>
+
+    {% if vehicles %}
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>Vehicle Number</th>
+                <th>Model</th>
+                <th>Type</th>
+                <th>Year</th>
+            </tr>
+
+            {% for vehicle in vehicles %}
+            <tr>
+                <td>{{ vehicle.vehicle_number }}</td>
+                <td>{{ vehicle.vehicle_model }}</td>
+                <td>{{ vehicle.vehicle_type }}</td>
+                <td>{{ vehicle.year }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    {% else %}
+
+        <p>No vehicles found.</p>
+
+    {% endif %}
+
+</body>
+</html>
+{% endcomment %}

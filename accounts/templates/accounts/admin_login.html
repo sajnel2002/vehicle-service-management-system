@@ -1,0 +1,709 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Admin Login - Vehicle Service Management System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'accounts/style.css' %}"
+    >
+
+    <style>
+
+        /* =====================================
+           ADMIN LOGIN PAGE
+           RESPONSIVE DESIGN
+           ===================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #06152f,
+                #0b2b57,
+                #06152f
+            );
+            color: #172033;
+        }
+
+
+        .admin-login-page {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+        }
+
+
+        .admin-login-wrapper {
+            width: 100%;
+            max-width: 900px;
+
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+
+            background: #ffffff;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+
+        /* =====================================
+           LEFT BRANDING
+           ===================================== */
+
+        .admin-brand-section {
+
+            background: linear-gradient(
+                145deg,
+                #09204a,
+                #0b376f
+            );
+
+            color: white;
+
+            padding: 50px 40px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .admin-brand-section::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            top: -100px;
+            right: -100px;
+        }
+
+
+        .admin-brand-section::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            bottom: -80px;
+            left: -70px;
+        }
+
+
+        .admin-brand-content {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .admin-brand-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .admin-brand-tag {
+
+            color: #62b7ff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+
+        .admin-brand-title {
+
+            margin: 0 0 18px;
+
+            font-size: 32px;
+
+            line-height: 1.2;
+
+            color: #ffffff;
+        }
+
+
+        .admin-brand-description {
+
+            margin: 0;
+
+            color: #d5e4f7;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================
+           LOGIN SECTION
+           ===================================== */
+
+        .admin-login-section {
+
+            padding: 45px 50px;
+
+            background: #ffffff;
+        }
+
+
+        .admin-login-header {
+
+            margin-bottom: 28px;
+        }
+
+
+        .admin-login-label {
+
+            color: #1769d1;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .admin-login-title {
+
+            margin: 0 0 8px;
+
+            font-size: 28px;
+
+            color: #172033;
+        }
+
+
+        .admin-login-subtitle {
+
+            margin: 0;
+
+            color: #687386;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================
+           MESSAGES
+           ===================================== */
+
+        .admin-message {
+
+            padding: 11px 14px;
+
+            margin-bottom: 18px;
+
+            border-radius: 9px;
+
+            background: #eef6ff;
+
+            color: #174f8f;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================
+           FORM
+           ===================================== */
+
+        .admin-form-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        .admin-form-group label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #263247;
+
+            margin-bottom: 8px;
+        }
+
+
+        .admin-form-group input {
+
+            width: 100%;
+
+            height: 48px;
+
+            padding: 0 14px;
+
+            border: 1px solid #d7e0ec;
+
+            border-radius: 9px;
+
+            background: #f9fbfd;
+
+            font-size: 14px;
+
+            color: #172033;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+
+        .admin-form-group input:focus {
+
+            border-color: #2176d2;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 0 0 3px rgba(33, 118, 210, 0.10);
+        }
+
+
+        /* =====================================
+           LOGIN BUTTON
+           ===================================== */
+
+        .admin-login-button {
+
+            width: 100%;
+
+            height: 48px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            background: linear-gradient(
+                90deg,
+                #1769d1,
+                #2396dc
+            );
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 7px 18px rgba(23, 105, 209, 0.20);
+
+            transition: 0.2s ease;
+        }
+
+
+        .admin-login-button:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 10px 22px rgba(23, 105, 209, 0.28);
+        }
+
+
+        /* =====================================
+           BACK TO LOGIN
+           ===================================== */
+
+        .admin-back {
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #e4e9f0;
+
+            color: #687386;
+
+            font-size: 13px;
+        }
+
+
+        .admin-back a {
+
+            color: #1859a5;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        .admin-back a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =====================================
+           TABLET
+           ===================================== */
+
+        @media (max-width: 750px) {
+
+            .admin-login-wrapper {
+
+                grid-template-columns: 1fr;
+
+                max-width: 550px;
+            }
+
+
+            .admin-brand-section {
+
+                padding: 35px;
+
+                text-align: center;
+
+                justify-content: center;
+            }
+
+
+            .admin-brand-icon {
+
+                font-size: 42px;
+
+                margin-bottom: 10px;
+            }
+
+
+            .admin-brand-title {
+
+                font-size: 28px;
+            }
+
+
+            .admin-brand-description {
+
+                max-width: 450px;
+
+                margin: auto;
+            }
+
+
+            .admin-login-section {
+
+                padding: 35px;
+            }
+        }
+
+
+        /* =====================================
+           MOBILE
+           ===================================== */
+
+        @media (max-width: 500px) {
+
+            .admin-login-page {
+
+                padding: 15px;
+            }
+
+
+            .admin-login-wrapper {
+
+                border-radius: 18px;
+
+                margin: 10px 0;
+            }
+
+
+            .admin-brand-section {
+
+                padding: 28px 22px;
+            }
+
+
+            .admin-brand-title {
+
+                font-size: 24px;
+            }
+
+
+            .admin-brand-description {
+
+                font-size: 13px;
+            }
+
+
+            .admin-login-section {
+
+                padding: 28px 22px;
+            }
+
+
+            .admin-login-title {
+
+                font-size: 24px;
+            }
+
+
+            .admin-login-subtitle {
+
+                font-size: 13px;
+            }
+        }
+
+
+        /* =====================================
+           VERY SMALL PHONES
+           ===================================== */
+
+        @media (max-width: 360px) {
+
+            .admin-login-page {
+
+                padding: 10px;
+            }
+
+
+            .admin-brand-section {
+
+                padding: 24px 18px;
+            }
+
+
+            .admin-login-section {
+
+                padding: 24px 18px;
+            }
+
+
+            .admin-brand-title {
+
+                font-size: 22px;
+            }
+
+
+            .admin-login-title {
+
+                font-size: 22px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="admin-login-page">
+
+    <div class="admin-login-wrapper">
+
+
+        <!-- =================================
+             LEFT BRANDING
+             ================================= -->
+
+        <div class="admin-brand-section">
+
+            <div class="admin-brand-content">
+
+                <div class="admin-brand-icon">
+                    🚗
+                </div>
+
+                <div class="admin-brand-tag">
+                    Administration
+                </div>
+
+                <h1 class="admin-brand-title">
+                    Vehicle Service<br>
+                    Management
+                </h1>
+
+                <p class="admin-brand-description">
+                    Secure administrative access to manage
+                    vehicle service operations, advisors,
+                    bookings, payments, and reports.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             ADMIN LOGIN
+             ================================= -->
+
+        <div class="admin-login-section">
+
+
+            <div class="admin-login-header">
+
+                <div class="admin-login-label">
+                    Administrator Access
+                </div>
+
+                <h2 class="admin-login-title">
+                    👨‍💻 Administrator Login
+                </h2>
+
+                <p class="admin-login-subtitle">
+                    Login to manage the Vehicle Service
+                    Management System.
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <p class="admin-message">
+                        {{ message }}
+                    </p>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="admin-form-group">
+
+                    <label for="admin-username">
+                        Admin Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="admin-username"
+                        name="username"
+                        placeholder="Enter admin username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-form-group">
+
+                    <label for="admin-password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="admin-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="admin-login-button"
+                >
+                    Admin Login
+                </button>
+
+            </form>
+
+
+            <!-- BACK TO MAIN LOGIN -->
+
+            <div class="admin-back">
+
+                Not an administrator?
+
+                <a href="{% url 'login' %}">
+                    Go back to Main Login
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

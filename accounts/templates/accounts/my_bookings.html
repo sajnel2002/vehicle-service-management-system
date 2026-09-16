@@ -1,0 +1,952 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+My Bookings | Vehicle Service Management System
+{% endblock %}
+
+{% block content %}
+
+<section class="page-heading">
+
+    <div>
+        <p class="eyebrow">Appointments</p>
+
+        <h1>
+            My Service Bookings
+        </h1>
+
+        <p class="heading-subtitle">
+            Track your vehicle service appointments and payment status.
+        </p>
+    </div>
+
+    <div class="heading-actions">
+
+        <a
+            class="button"
+            href="{% url 'create_booking' %}"
+        >
+            + Book a Service
+        </a>
+
+        <a
+            class="button secondary"
+            href="{% url 'dashboard' %}"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="panel bookings-panel">
+
+    {% if bookings %}
+
+    <!-- ============================= -->
+    <!-- DESKTOP TABLE -->
+    <!-- ============================= -->
+
+    <div class="table-wrap">
+
+        <table class="bookings-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Vehicle</th>
+
+                    <th>Service</th>
+
+                    <th>Location</th>
+
+                    <th>Appointment</th>
+
+                    <th>Advisor</th>
+
+                    <th>Status</th>
+
+                    <th>Payment</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for booking in bookings %}
+
+                <tr>
+
+                    <!-- VEHICLE -->
+
+                    <td>
+
+                        <strong>
+                            {{ booking.vehicle.vehicle_number }}
+                        </strong>
+
+                        <small>
+                            {{ booking.vehicle.vehicle_model }}
+                        </small>
+
+                    </td>
+
+
+                    <!-- SERVICE -->
+
+                    <td>
+
+                        <strong>
+                            {{ booking.service.name }}
+                        </strong>
+
+                        <small>
+                            ₹{{ booking.service.price }}
+                        </small>
+
+                    </td>
+
+
+                    <!-- LOCATION -->
+
+                    <td>
+
+                        <span class="location-text">
+                            📍 {{ booking.location }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- APPOINTMENT -->
+
+                    <td>
+
+                        <strong>
+                            {{ booking.booking_date|date:'d M Y' }}
+                        </strong>
+
+                        <small>
+                            {{ booking.get_booking_time_display }}
+                        </small>
+
+                    </td>
+
+
+                    <!-- ADVISOR -->
+
+                    <td>
+
+                        {% if booking.advisor %}
+
+                        <span>
+                            {{ booking.advisor.get_full_name|default:booking.advisor.username }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="muted">
+                            To be assigned
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        <span class="badge {{ booking.status|lower }}">
+                            {{ booking.get_status_display }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- PAYMENT -->
+
+                    <td>
+
+                        {% if booking.payment %}
+
+                        <span class="badge payment-{{ booking.payment.payment_status|lower }}">
+                            {{ booking.payment.get_payment_status_display }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge payment-pending">
+                            Pending
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td>
+
+                        <a
+                            class="view-link"
+                            href="{% url 'booking_detail' booking.id %}"
+                        >
+                            View Details →
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- MOBILE CARDS -->
+    <!-- ============================= -->
+
+    <div class="mobile-booking-list">
+
+        {% for booking in bookings %}
+
+        <article class="booking-card">
+
+            <!-- CARD HEADER -->
+
+            <div class="booking-card-header">
+
+                <div>
+
+                    <p class="muted">
+                        Vehicle
+                    </p>
+
+                    <h2>
+                        {{ booking.vehicle.vehicle_number }}
+                    </h2>
+
+                    <p class="vehicle-model">
+                        {{ booking.vehicle.vehicle_model }}
+                    </p>
+
+                </div>
+
+
+                <span class="badge {{ booking.status|lower }}">
+                    {{ booking.get_status_display }}
+                </span>
+
+            </div>
+
+
+            <!-- SERVICE -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    🔧 Service
+                </span>
+
+                <strong>
+                    {{ booking.service.name }}
+                </strong>
+
+            </div>
+
+
+            <!-- PRICE -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    💰 Amount
+                </span>
+
+                <strong>
+                    ₹{{ booking.service.price }}
+                </strong>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    📍 Location
+                </span>
+
+                <strong>
+                    {{ booking.location }}
+                </strong>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    📅 Date
+                </span>
+
+                <strong>
+                    {{ booking.booking_date|date:'d M Y' }}
+                </strong>
+
+            </div>
+
+
+            <!-- TIME -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    🕐 Time
+                </span>
+
+                <strong>
+                    {{ booking.get_booking_time_display }}
+                </strong>
+
+            </div>
+
+
+            <!-- ADVISOR -->
+
+            <div class="booking-info-row">
+
+                <span>
+                    👨‍🔧 Advisor
+                </span>
+
+                <strong>
+
+                    {% if booking.advisor %}
+
+                        {{ booking.advisor.get_full_name|default:booking.advisor.username }}
+
+                    {% else %}
+
+                        To be assigned
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="booking-payment-row">
+
+                <span>
+                    Payment
+                </span>
+
+
+                {% if booking.payment %}
+
+                <span class="badge payment-{{ booking.payment.payment_status|lower }}">
+                    {{ booking.payment.get_payment_status_display }}
+                </span>
+
+                {% else %}
+
+                <span class="badge payment-pending">
+                    Pending
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <a
+                class="button booking-view-button"
+                href="{% url 'booking_detail' booking.id %}"
+            >
+                View Booking Details
+            </a>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <!-- ============================= -->
+    <!-- EMPTY STATE -->
+    <!-- ============================= -->
+
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            📅
+        </div>
+
+        <h2>
+            No Service Bookings Yet
+        </h2>
+
+        <p>
+            You haven't scheduled a vehicle service appointment yet.
+            Book your first service and keep your vehicle in great condition.
+        </p>
+
+        <a
+            class="button"
+            href="{% url 'create_booking' %}"
+        >
+            🚗 Book a Service
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+
+<style>
+
+/* ========================================= */
+/* PAGE HEADING */
+/* ========================================= */
+
+.page-heading {
+    max-width: 1200px;
+
+    margin: 0 auto 25px;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 25px;
+}
+
+
+.heading-subtitle {
+    margin-top: 7px;
+
+    color: #64748b;
+}
+
+
+.heading-actions {
+    display: flex;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+
+/* ========================================= */
+/* MAIN PANEL */
+/* ========================================= */
+
+.bookings-panel {
+    max-width: 1200px;
+
+    margin: 0 auto 50px;
+
+    padding: 0;
+
+    overflow: hidden;
+}
+
+
+
+/* ========================================= */
+/* TABLE */
+/* ========================================= */
+
+.table-wrap {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.bookings-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1050px;
+}
+
+
+.bookings-table th {
+    padding: 17px 16px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.bookings-table td {
+    padding: 18px 16px;
+
+    border-bottom: 1px solid #eef2f7;
+
+    vertical-align: middle;
+
+    color: #334155;
+}
+
+
+.bookings-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+
+.bookings-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+
+.bookings-table td strong {
+    display: block;
+
+    color: #0f172a;
+
+    margin-bottom: 4px;
+}
+
+
+.bookings-table td small {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+.location-text {
+    white-space: nowrap;
+}
+
+
+.view-link {
+    color: #2563eb;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.view-link:hover {
+    text-decoration: underline;
+}
+
+
+.muted {
+    color: #64748b;
+}
+
+
+
+/* ========================================= */
+/* BADGES */
+/* ========================================= */
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* BOOKING STATUS */
+
+.badge.pending {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+.badge.confirmed {
+    background: #eff6ff;
+
+    color: #1d4ed8;
+}
+
+
+.badge.in_progress {
+    background: #fefce8;
+
+    color: #a16207;
+}
+
+
+.badge.completed {
+    background: #ecfdf5;
+
+    color: #047857;
+}
+
+
+
+/* PAYMENT STATUS */
+
+.payment-success {
+    background: #ecfdf5;
+
+    color: #047857;
+}
+
+
+.payment-pending {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+.payment-failed {
+    background: #fef2f2;
+
+    color: #b91c1c;
+}
+
+
+
+/* ========================================= */
+/* MOBILE BOOKING LIST */
+/* ========================================= */
+
+.mobile-booking-list {
+    display: none;
+}
+
+
+.booking-card {
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    background: #ffffff;
+}
+
+
+.booking-card:last-child {
+    margin-bottom: 0;
+}
+
+
+.booking-card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+
+.booking-card-header h2 {
+    margin: 4px 0;
+
+    font-size: 20px;
+}
+
+
+.vehicle-model {
+    margin: 0;
+
+    color: #64748b;
+}
+
+
+.booking-info-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    font-size: 14px;
+}
+
+
+.booking-info-row span {
+    color: #64748b;
+}
+
+
+.booking-info-row strong {
+    color: #0f172a;
+
+    text-align: right;
+}
+
+
+.booking-payment-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 16px 0;
+}
+
+
+.booking-view-button {
+    width: 100%;
+
+    text-align: center;
+
+    margin-top: 5px;
+}
+
+
+
+/* ========================================= */
+/* EMPTY STATE */
+/* ========================================= */
+
+.empty-state {
+    text-align: center;
+
+    padding: 70px 25px;
+}
+
+
+.empty-icon {
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eaf2ff;
+
+    font-size: 32px;
+}
+
+
+.empty-state h2 {
+    margin-bottom: 10px;
+}
+
+
+.empty-state p {
+    max-width: 520px;
+
+    margin: 0 auto 25px;
+
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+
+/* ========================================= */
+/* TABLET */
+/* ========================================= */
+
+@media (max-width: 1050px) {
+
+    .table-wrap {
+        display: none;
+    }
+
+
+    .mobile-booking-list {
+        display: block;
+
+        padding: 18px;
+    }
+
+}
+
+
+
+/* ========================================= */
+/* MOBILE */
+/* ========================================= */
+
+@media (max-width: 650px) {
+
+    .page-heading {
+        align-items: stretch;
+
+        flex-direction: column;
+
+        padding: 0 10px;
+
+        gap: 15px;
+    }
+
+
+    .heading-actions {
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+
+    .heading-actions .button {
+        width: 100%;
+
+        text-align: center;
+    }
+
+
+    .bookings-panel {
+        margin-left: 10px;
+
+        margin-right: 10px;
+
+        border-radius: 14px;
+    }
+
+
+    .mobile-booking-list {
+        padding: 12px;
+    }
+
+
+    .booking-card-header {
+        align-items: flex-start;
+    }
+
+
+    .booking-card-header h2 {
+        font-size: 18px;
+    }
+
+}
+
+
+
+/* ========================================= */
+/* SMALL MOBILE */
+/* ========================================= */
+
+@media (max-width: 420px) {
+
+    .booking-card-header {
+        flex-direction: column;
+    }
+
+
+    .booking-card-header .badge {
+        align-self: flex-start;
+    }
+
+
+    .booking-info-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .booking-info-row strong {
+        text-align: left;
+    }
+
+
+    .booking-payment-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

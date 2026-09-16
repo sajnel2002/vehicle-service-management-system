@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #333;
+}
+
+/* Main container */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 50px auto;
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1 {
+    color: #1f3c88;
+}
+
+h2 {
+    color: #444;
+}
+
+/* Forms */
+form {
+    margin-top: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+/* Buttons */
+button {
+    background: #1f3c88;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #162c63;
+}
+
+/* Links */
+a {
+    color: #1f3c88;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background: #1f3c88;
+    color: white;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+/* Dashboard menu */
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    background: #f4f6f9;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.menu li:hover {
+    background: #e8ecf5;
+}
+
+/* Messages */
+.message {
+    padding: 10px;
+    border-radius: 6px;
+    background: #ffe8e8;
+    margin-bottom: 15px;
+}
+
+/* Login/Register card */
+.auth-container {
+    max-width: 450px;
+    margin: 70px auto;
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Premium application shell */
+body { font-family: Inter, Segoe UI, Arial, sans-serif; background: radial-gradient(circle at 10% 10%, #e0f2fe, transparent 32%), linear-gradient(135deg,#f8fafc,#eef2ff); color:#172033; min-height:100vh; }
+.app-body { background:linear-gradient(135deg,#f8fafc,#eff6ff 48%,#f5f3ff); }
+.topbar { height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 6%; background:rgba(15,23,42,.94); color:#fff; box-shadow:0 8px 26px rgba(15,23,42,.13); }
+.brand { color:#fff; font-size:1.25rem; letter-spacing:.02em; }.brand span { color:#38bdf8; }.nav-links { display:flex; align-items:center; gap:16px; }.user-chip { color:#cbd5e1; font-size:.9rem; }.link-btn { background:transparent; padding:7px 0; color:#fff; font-size:.9rem; }
+.page-shell { width:min(1180px,92%); margin:38px auto 64px; }.hero { color:#fff; border-radius:22px; padding:44px; background:linear-gradient(120deg,#0f172a,#1d4ed8 65%,#0ea5e9); box-shadow:0 18px 44px rgba(30,64,175,.22); margin-bottom:26px; }.hero.compact { padding:32px 38px; }.hero h1 { color:#fff; margin:6px 0; }.eyebrow { text-transform:uppercase; letter-spacing:.13em; font-size:.72rem; font-weight:800; color:#7dd3fc; margin:0; }.panel { background:rgba(255,255,255,.9); border:1px solid #e2e8f0; border-radius:18px; padding:26px; box-shadow:0 10px 28px rgba(15,23,42,.06); margin:18px 0; }.detail-grid,.payment-card { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }.payment-card { grid-template-columns:2fr 1fr; align-items:center; }.muted { color:#64748b; }.badge { display:inline-block; border-radius:99px; padding:6px 11px; background:#e2e8f0; font-size:.78rem; font-weight:800; }.badge.success,.badge.completed { background:#dcfce7; color:#166534; }.badge.pending,.badge.confirmed { background:#fef3c7; color:#92400e; }.badge.in_progress { background:#dbeafe; color:#1d4ed8; }.button { display:inline-block; background:linear-gradient(135deg,#2563eb,#0ea5e9); color:#fff; border-radius:9px; padding:12px 20px; font-weight:700; margin:8px 4px 0 0; }.button.secondary { background:#e2e8f0; color:#1e293b; }.flash { padding:13px 17px; border-radius:10px; margin-bottom:16px; background:#dbeafe; color:#1e40af; }.flash.error { background:#fee2e2; color:#991b1b; }.flash.success { background:#dcfce7; color:#166534; }.table-wrap { overflow:auto; } table { border:0; } th,td { border:0; border-bottom:1px solid #e2e8f0; } th { background:#0f172a; } input,select,textarea { width:100%; padding:12px; margin-top:6px; border:1px solid #cbd5e1; border-radius:8px; font:inherit; } textarea { resize:vertical; } .auth-container { border:1px solid #e2e8f0; background:rgba(255,255,255,.94); } .auth-container:before { content:'AUTOMOTIVE CARE'; color:#2563eb; font-size:.72rem; font-weight:800; letter-spacing:.15em; }
+@media(max-width:700px){.detail-grid,.payment-card{grid-template-columns:1fr}.topbar{padding:0 4%}.user-chip{display:none}.hero{padding:28px}.page-shell{margin-top:22px}}
+
+/* Complete UI system */
+:root{--navy:#0b1730;--blue:#1769e0;--sky:#36a9e1;--ink:#17233a;--muted:#66758d;--line:#e3eaf4;--surface:#fff;--soft:#f5f8fc}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);line-height:1.5}.app-body{background:linear-gradient(135deg,#f7faff 0%,#edf5ff 52%,#f7f9fc 100%)}.topbar{height:auto;min-height:76px;background:linear-gradient(100deg,#08142b,#112c56);padding:14px clamp(18px,5vw,70px);gap:16px}.brand{font-size:0!important;white-space:nowrap}.brand:after{content:"Vehicle Service Management System";font-size:1.08rem;font-weight:800;letter-spacing:.01em}.brand span{font-size:1.1rem}.nav-links{margin-left:auto}.user-chip{background:rgba(255,255,255,.09);padding:8px 12px;border-radius:8px}.link-btn{border:1px solid rgba(255,255,255,.48);border-radius:8px;padding:8px 13px!important}.page-shell{min-height:calc(100vh - 76px)}.page-heading{margin:4px 0 24px}.page-heading h1{font-size:clamp(1.8rem,3vw,2.45rem);margin:4px 0;color:var(--navy)}.page-heading p{color:var(--muted);margin:0}.action-grid,.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.action-card{display:block;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 9px 26px rgba(27,57,95,.07);transition:.2s ease;color:var(--ink)}.action-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(27,57,95,.14);text-decoration:none}.action-card.primary{background:linear-gradient(135deg,#155cc5,#1688d8);border:0;color:#fff}.action-card h2{font-size:1.05rem;margin:13px 0 5px;color:inherit}.action-card p{font-size:.9rem;color:inherit;opacity:.78;margin:0}.icon,.empty-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#e8f2ff;color:#1769e0;font-size:1.25rem;font-weight:800}.action-card.primary .icon{background:rgba(255,255,255,.16);color:#fff}.stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.stat-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 24px rgba(27,57,95,.06)}.stat-card span,.stat-card small{display:block;color:var(--muted);font-size:.86rem}.stat-card strong{display:block;color:var(--navy);font-size:2rem;margin:7px 0}.panel{background:#fff;border-color:var(--line);box-shadow:0 10px 32px rgba(26,55,90,.07)}.table-wrap{padding:4px 22px 18px}table{margin:0}th{background:#f1f6fd;color:#43536b;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em}td{color:#314057}tr:nth-child(even){background:#fbfdff}.empty-state{text-align:center;padding:54px 20px}.empty-state .empty-icon{margin:0 auto 15px;width:58px;height:58px;font-size:1.65rem}.empty-state h2{font-size:1.25rem;margin:4px 0;color:var(--navy)}.empty-state p{color:var(--muted);margin:0 auto 13px;max-width:400px}.inline-form{display:flex;gap:7px;margin:0}.inline-form select{min-width:118px;padding:7px;margin:0}.small-button{padding:7px 10px;font-size:.78rem}.auth-container{position:relative;margin:clamp(40px,10vh,95px) auto;border:0;box-shadow:0 24px 56px rgba(5,20,48,.2);border-radius:18px}.auth-container:after{content:"Vehicle Service Management System";position:absolute;top:-48px;left:0;color:#fff;font-weight:800;letter-spacing:.02em;font-size:1.1rem}.auth-container{background:rgba(255,255,255,.96)}body:has(.auth-container){background:linear-gradient(rgba(5,18,42,.72),rgba(5,18,42,.82)),radial-gradient(circle at 75% 18%,#2266c8,transparent 32%),linear-gradient(120deg,#07142a,#174b88)}.auth-container h1{font-size:1.6rem;margin:12px 0 2px}.auth-container h2{font-size:1.15rem}.auth-container input,.auth-container select{background:#f8fbff;border-color:#d7e3f3}.auth-container button{width:100%;margin-top:9px;background:linear-gradient(135deg,#145cc7,#1d8ad8)}
+@media(max-width:900px){.action-grid{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.action-grid,.stats-grid{grid-template-columns:1fr}.topbar{min-height:64px}.brand:after{font-size:.9rem}.page-shell{width:min(94%,1180px)}.table-wrap{padding:3px 10px 14px}.inline-form{flex-direction:column}.hero{border-radius:16px}}
+.booking-form{padding:30px}.form-section{padding:0 0 24px;margin:0 0 24px;border-bottom:1px solid var(--line)}.form-section:last-of-type{border:0;padding-bottom:0}.form-section h2{font-size:1.05rem;color:var(--navy);margin:0 0 14px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.form-grid p,.form-section>p{margin:0 0 14px}.form-section label{font-size:.88rem;color:#40506a}.service-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.service-option{display:flex;align-items:center;gap:12px;border:1px solid #dce7f4;border-radius:12px;padding:14px;cursor:pointer;background:#fbfdff}.service-option:hover{border-color:#6da3e7;background:#f4f9ff}.service-option input{width:auto;margin:0}.service-option span{flex:1}.service-option strong,.service-option small{display:block}.service-option small{font-size:.75rem;color:var(--muted);margin-top:2px}.service-option b{color:#1769e0;white-space:nowrap}@media(max-width:600px){.form-grid,.service-options{grid-template-columns:1fr}.booking-form{padding:20px}}
+.role-links{display:flex;align-items:center;gap:16px;margin-left:auto}.role-links a{color:#cbd5e1;font-size:.84rem;font-weight:600;white-space:nowrap}.role-links a:hover{color:#fff;text-decoration:none}.nav-links{margin-left:0}.page-heading + .stats-grid .stat-card:last-child{display:none}@media(max-width:1040px){.role-links{display:none}.nav-links{margin-left:auto}}
+.profile-card{display:flex;align-items:center;gap:16px}.profile-card h2{margin:0;color:var(--navy)}.profile-card p{margin:3px 0}.avatar{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1769e0,#36a9e1);color:#fff;font-size:1.35rem;font-weight:800}
+.inline-action{display:inline-block;margin:0 6px 0 0}.button.danger{background:#b91c1c}.button.danger:hover{background:#991b1b}
+.slot-message{margin:4px 0 0;color:var(--muted);font-size:.88rem}.slot-message:empty{display:none}
+.management-section{margin-top:34px}.section-intro{margin-bottom:16px}.section-intro h2{margin:3px 0;color:var(--navy)}.section-intro p:last-child{margin:0;color:var(--muted)}.hero-user{display:inline-block;margin:16px 0 0;padding:7px 11px;border-radius:8px;background:rgba(255,255,255,.12);font-size:.86rem}.admin-actions{grid-template-columns:repeat(5,minmax(0,1fr))}.admin-stats .stat-card{min-height:145px}@media(max-width:1100px){.admin-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:700px){.admin-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.admin-actions{grid-template-columns:1fr}}

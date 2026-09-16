@@ -1,0 +1,863 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Advisor Management · AutoCare{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .advisor-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px 0 40px;
+    }
+
+    .advisor-hero {
+        background: linear-gradient(135deg, #06152f, #0b376f);
+        border-radius: 18px;
+        padding: 32px;
+        color: white;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(6, 21, 47, 0.18);
+    }
+
+    .advisor-hero .eyebrow {
+        margin: 0 0 8px;
+        color: #62b7ff;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .advisor-hero h1 {
+        margin: 0 0 8px;
+        color: #ffffff;
+        font-size: 30px;
+    }
+
+    .advisor-hero p {
+        margin: 0;
+        color: #d7e7f8;
+        font-size: 14px;
+    }
+
+    .advisor-panel {
+        background: #ffffff;
+        border: 1px solid #e5eaf1;
+        border-radius: 16px;
+        margin-bottom: 22px;
+        overflow: hidden;
+        box-shadow: 0 5px 18px rgba(18, 38, 63, 0.06);
+    }
+
+    .advisor-panel-header {
+        padding: 20px 22px;
+        border-bottom: 1px solid #e8edf3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .advisor-panel-header h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 19px;
+    }
+
+    .advisor-panel-header span {
+        font-size: 12px;
+        color: #6b778a;
+    }
+
+    .advisor-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .advisor-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+    }
+
+    .advisor-table th {
+        background: #f6f9fc;
+        color: #536176;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: left;
+        padding: 14px 18px;
+        border-bottom: 1px solid #e4e9ef;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .advisor-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #edf1f5;
+        color: #263247;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .advisor-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .advisor-table tr:hover td {
+        background: #fbfdff;
+    }
+
+    .advisor-name {
+        font-weight: 700;
+        color: #172033;
+    }
+
+    .advisor-email {
+        color: #536176;
+    }
+
+    .advisor-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .advisor-action {
+        border: none;
+        border-radius: 7px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .advisor-action:hover {
+        transform: translateY(-1px);
+    }
+
+    .advisor-action.approve {
+        background: #1769d1;
+        color: white;
+    }
+
+    .advisor-action.approve:hover {
+        background: #1259b4;
+    }
+
+    .advisor-action.reject {
+        background: #eef1f5;
+        color: #475569;
+    }
+
+    .advisor-action.reject:hover {
+        background: #e3e8ef;
+    }
+
+    .advisor-action.revoke {
+        background: #fff0f0;
+        color: #c62828;
+    }
+
+    .advisor-action.revoke:hover {
+        background: #ffe2e2;
+    }
+
+    .advisor-action.pdf {
+        background: #edf6ff;
+        color: #1769d1;
+        border: 1px solid #d3e7fb;
+    }
+
+    .advisor-action.pdf:hover {
+        background: #e0f0ff;
+    }
+
+    .advisor-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .advisor-badge.approved {
+        background: #eaf8ef;
+        color: #21853a;
+    }
+
+    .advisor-badge.rejected {
+        background: #fff0f0;
+        color: #c62828;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 35px 20px;
+        color: #748095;
+        font-size: 14px;
+    }
+
+    .empty-icon {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    /* Mobile advisor cards */
+
+    .advisor-mobile-list {
+        display: none;
+    }
+
+    .advisor-mobile-card {
+        padding: 18px;
+        border-bottom: 1px solid #e9eef4;
+    }
+
+    .advisor-mobile-card:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-advisor-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .mobile-advisor-name {
+        font-weight: 700;
+        color: #172033;
+        font-size: 15px;
+    }
+
+    .mobile-advisor-details {
+        color: #657286;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .mobile-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    @media (max-width: 700px) {
+
+        .advisor-page {
+            padding: 5px 0 30px;
+        }
+
+        .advisor-hero {
+            padding: 24px 20px;
+            border-radius: 15px;
+        }
+
+        .advisor-hero h1 {
+            font-size: 24px;
+        }
+
+        .advisor-panel {
+            border-radius: 13px;
+        }
+
+        .advisor-panel-header {
+            padding: 17px;
+        }
+
+        .advisor-panel-header h2 {
+            font-size: 17px;
+        }
+
+        .advisor-table-wrap {
+            display: none;
+        }
+
+        .advisor-mobile-list {
+            display: block;
+        }
+
+        .advisor-action {
+            padding: 9px 11px;
+        }
+    }
+
+</style>
+
+
+<div class="advisor-page">
+
+    <!-- PAGE HEADER -->
+
+    <section class="advisor-hero">
+
+        <p class="eyebrow">
+            Team Management
+        </p>
+
+        <h1>
+            Service Advisor Approvals
+        </h1>
+
+        <p>
+            Review advisor applications, verify joining letters,
+            and manage advisor access.
+        </p>
+
+    </section>
+
+
+    <!-- PENDING ADVISORS -->
+
+    <section class="advisor-panel">
+
+        <div class="advisor-panel-header">
+
+            <h2>
+                Pending Applications
+            </h2>
+
+            <span>
+                Awaiting review
+            </span>
+
+        </div>
+
+
+        <!-- DESKTOP TABLE -->
+
+        <div class="advisor-table-wrap">
+
+            <table class="advisor-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Advisor</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Joining Letter</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for advisor in pending_advisors %}
+
+                    <tr>
+
+                        <td>
+                            <div class="advisor-name">
+                                {{ advisor.username }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="advisor-email">
+                                {{ advisor.email }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ advisor.phone }}
+                        </td>
+
+                        <td>
+
+                            {% if advisor.joining_letter %}
+
+                            <a
+                                href="{% url 'view_joining_letter' advisor.id %}"
+                                target="_blank"
+                                class="advisor-action pdf"
+                            >
+                                📄 View PDF
+                            </a>
+
+                            {% else %}
+
+                            <span class="advisor-badge rejected">
+                                Not uploaded
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="advisor-actions">
+
+                                <form
+                                    method="post"
+                                    action="{% url 'approve_advisor' advisor.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="advisor-action approve"
+                                    >
+                                        ✓ Approve
+                                    </button>
+
+                                </form>
+
+
+                                <form
+                                    method="post"
+                                    action="{% url 'reject_advisor' advisor.id %}"
+                                    onsubmit="return confirm('Reject {{ advisor.username }}?');"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="advisor-action reject"
+                                    >
+                                        ✕ Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    ✓
+                                </div>
+
+                                No pending advisor applications.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MOBILE CARDS -->
+
+        <div class="advisor-mobile-list">
+
+            {% for advisor in pending_advisors %}
+
+            <div class="advisor-mobile-card">
+
+                <div class="mobile-advisor-top">
+
+                    <div class="mobile-advisor-name">
+                        {{ advisor.username }}
+                    </div>
+
+                    <span class="advisor-badge">
+                        Pending
+                    </span>
+
+                </div>
+
+                <div class="mobile-advisor-details">
+
+                    📧 {{ advisor.email }}<br>
+                    📱 {{ advisor.phone }}
+
+                </div>
+
+                <div class="mobile-actions">
+
+                    {% if advisor.joining_letter %}
+
+                    <a
+                        href="{% url 'view_joining_letter' advisor.id %}"
+                        target="_blank"
+                        class="advisor-action pdf"
+                    >
+                        📄 View Joining Letter
+                    </a>
+
+                    {% endif %}
+
+
+                    <form
+                        method="post"
+                        action="{% url 'approve_advisor' advisor.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="advisor-action approve"
+                        >
+                            ✓ Approve
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        method="post"
+                        action="{% url 'reject_advisor' advisor.id %}"
+                        onsubmit="return confirm('Reject {{ advisor.username }}?');"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="advisor-action reject"
+                        >
+                            ✕ Reject
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                <div class="empty-icon">✓</div>
+                No pending advisor applications.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- APPROVED ADVISORS -->
+
+    <section class="advisor-panel">
+
+        <div class="advisor-panel-header">
+
+            <h2>
+                Approved Advisors
+            </h2>
+
+            <span>
+                Active team members
+            </span>
+
+        </div>
+
+
+        <div class="advisor-table-wrap">
+
+            <table class="advisor-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Advisor</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Access</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for advisor in approved_advisors %}
+
+                    <tr>
+
+                        <td>
+                            <div class="advisor-name">
+                                {{ advisor.username }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="advisor-email">
+                                {{ advisor.email }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ advisor.phone }}
+                        </td>
+
+                        <td>
+                            <span class="advisor-badge approved">
+                                ● Approved
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <form
+                                method="post"
+                                action="{% url 'revoke_advisor' advisor.id %}"
+                                onsubmit="return confirm('Revoke advisor access for {{ advisor.username }}? Their account and booking history will be kept.');"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="advisor-action revoke"
+                                >
+                                    Revoke Access
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    👤
+                                </div>
+
+                                No approved advisors yet.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="advisor-mobile-list">
+
+            {% for advisor in approved_advisors %}
+
+            <div class="advisor-mobile-card">
+
+                <div class="mobile-advisor-top">
+
+                    <div class="mobile-advisor-name">
+                        {{ advisor.username }}
+                    </div>
+
+                    <span class="advisor-badge approved">
+                        Approved
+                    </span>
+
+                </div>
+
+                <div class="mobile-advisor-details">
+
+                    📧 {{ advisor.email }}<br>
+                    📱 {{ advisor.phone }}
+
+                </div>
+
+                <div class="mobile-actions">
+
+                    <form
+                        method="post"
+                        action="{% url 'revoke_advisor' advisor.id %}"
+                        onsubmit="return confirm('Revoke advisor access for {{ advisor.username }}? Their account and booking history will be kept.');"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="advisor-action revoke"
+                        >
+                            Revoke Access
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                <div class="empty-icon">👤</div>
+                No approved advisors yet.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- REJECTED ADVISORS -->
+
+    <section class="advisor-panel">
+
+        <div class="advisor-panel-header">
+
+            <h2>
+                Rejected Advisors
+            </h2>
+
+            <span>
+                Access revoked
+            </span>
+
+        </div>
+
+
+        <div class="advisor-table-wrap">
+
+            <table class="advisor-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Advisor</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for advisor in rejected_advisors %}
+
+                    <tr>
+
+                        <td>
+                            <div class="advisor-name">
+                                {{ advisor.username }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {{ advisor.email }}
+                        </td>
+
+                        <td>
+                            <span class="advisor-badge rejected">
+                                Access Revoked
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="3">
+
+                            <div class="empty-state">
+                                No rejected advisors.
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="advisor-mobile-list">
+
+            {% for advisor in rejected_advisors %}
+
+            <div class="advisor-mobile-card">
+
+                <div class="mobile-advisor-top">
+
+                    <div class="mobile-advisor-name">
+                        {{ advisor.username }}
+                    </div>
+
+                    <span class="advisor-badge rejected">
+                        Rejected
+                    </span>
+
+                </div>
+
+                <div class="mobile-advisor-details">
+                    📧 {{ advisor.email }}
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                No rejected advisors.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

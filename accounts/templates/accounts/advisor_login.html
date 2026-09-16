@@ -1,0 +1,713 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Advisor Login - Vehicle Service Management System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'accounts/style.css' %}"
+    >
+
+    <style>
+
+        /* =====================================
+           ADVISOR LOGIN PAGE
+           RESPONSIVE DESIGN
+           ===================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #06152f,
+                #0b2b57,
+                #06152f
+            );
+
+            color: #172033;
+        }
+
+
+        .advisor-login-page {
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+        }
+
+
+        .advisor-login-wrapper {
+
+            width: 100%;
+            max-width: 900px;
+
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+
+            background: #ffffff;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+
+        /* =====================================
+           LEFT BRANDING
+           ===================================== */
+
+        .advisor-brand-section {
+
+            background: linear-gradient(
+                145deg,
+                #09204a,
+                #0b376f
+            );
+
+            color: white;
+
+            padding: 50px 40px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .advisor-brand-section::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            top: -100px;
+            right: -100px;
+        }
+
+
+        .advisor-brand-section::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            bottom: -80px;
+            left: -70px;
+        }
+
+
+        .advisor-brand-content {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .advisor-brand-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .advisor-brand-tag {
+
+            color: #62b7ff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+
+        .advisor-brand-title {
+
+            margin: 0 0 18px;
+
+            font-size: 32px;
+
+            line-height: 1.2;
+
+            color: #ffffff;
+        }
+
+
+        .advisor-brand-description {
+
+            margin: 0;
+
+            color: #d5e4f7;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================
+           LOGIN SECTION
+           ===================================== */
+
+        .advisor-login-section {
+
+            padding: 45px 50px;
+
+            background: #ffffff;
+        }
+
+
+        .advisor-login-header {
+
+            margin-bottom: 28px;
+        }
+
+
+        .advisor-login-label {
+
+            color: #1769d1;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .advisor-login-title {
+
+            margin: 0 0 8px;
+
+            font-size: 28px;
+
+            color: #172033;
+        }
+
+
+        .advisor-login-subtitle {
+
+            margin: 0;
+
+            color: #687386;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================
+           MESSAGES
+           ===================================== */
+
+        .advisor-message {
+
+            padding: 11px 14px;
+
+            margin-bottom: 18px;
+
+            border-radius: 9px;
+
+            background: #eef6ff;
+
+            color: #174f8f;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================
+           FORM
+           ===================================== */
+
+        .advisor-form-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        .advisor-form-group label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #263247;
+
+            margin-bottom: 8px;
+        }
+
+
+        .advisor-form-group input {
+
+            width: 100%;
+
+            height: 48px;
+
+            padding: 0 14px;
+
+            border: 1px solid #d7e0ec;
+
+            border-radius: 9px;
+
+            background: #f9fbfd;
+
+            font-size: 14px;
+
+            color: #172033;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+
+        .advisor-form-group input:focus {
+
+            border-color: #2176d2;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 0 0 3px rgba(33, 118, 210, 0.10);
+        }
+
+
+        /* =====================================
+           LOGIN BUTTON
+           ===================================== */
+
+        .advisor-login-button {
+
+            width: 100%;
+
+            height: 48px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            background: linear-gradient(
+                90deg,
+                #1769d1,
+                #2396dc
+            );
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 7px 18px rgba(23, 105, 209, 0.20);
+
+            transition: 0.2s ease;
+        }
+
+
+        .advisor-login-button:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 10px 22px rgba(23, 105, 209, 0.28);
+        }
+
+
+        /* =====================================
+           BACK TO MAIN LOGIN
+           ===================================== */
+
+        .advisor-back {
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #e4e9f0;
+
+            color: #687386;
+
+            font-size: 13px;
+        }
+
+
+        .advisor-back a {
+
+            color: #1859a5;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        .advisor-back a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =====================================
+           TABLET
+           ===================================== */
+
+        @media (max-width: 750px) {
+
+            .advisor-login-wrapper {
+
+                grid-template-columns: 1fr;
+
+                max-width: 550px;
+            }
+
+
+            .advisor-brand-section {
+
+                padding: 35px;
+
+                text-align: center;
+
+                justify-content: center;
+            }
+
+
+            .advisor-brand-icon {
+
+                font-size: 42px;
+
+                margin-bottom: 10px;
+            }
+
+
+            .advisor-brand-title {
+
+                font-size: 28px;
+            }
+
+
+            .advisor-brand-description {
+
+                max-width: 450px;
+
+                margin: auto;
+            }
+
+
+            .advisor-login-section {
+
+                padding: 35px;
+            }
+        }
+
+
+        /* =====================================
+           MOBILE
+           ===================================== */
+
+        @media (max-width: 500px) {
+
+            .advisor-login-page {
+
+                padding: 15px;
+            }
+
+
+            .advisor-login-wrapper {
+
+                border-radius: 18px;
+
+                margin: 10px 0;
+            }
+
+
+            .advisor-brand-section {
+
+                padding: 28px 22px;
+            }
+
+
+            .advisor-brand-title {
+
+                font-size: 24px;
+            }
+
+
+            .advisor-brand-description {
+
+                font-size: 13px;
+            }
+
+
+            .advisor-login-section {
+
+                padding: 28px 22px;
+            }
+
+
+            .advisor-login-title {
+
+                font-size: 24px;
+            }
+
+
+            .advisor-login-subtitle {
+
+                font-size: 13px;
+            }
+        }
+
+
+        /* =====================================
+           VERY SMALL PHONES
+           ===================================== */
+
+        @media (max-width: 360px) {
+
+            .advisor-login-page {
+
+                padding: 10px;
+            }
+
+
+            .advisor-brand-section {
+
+                padding: 24px 18px;
+            }
+
+
+            .advisor-login-section {
+
+                padding: 24px 18px;
+            }
+
+
+            .advisor-brand-title {
+
+                font-size: 22px;
+            }
+
+
+            .advisor-login-title {
+
+                font-size: 22px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="advisor-login-page">
+
+    <div class="advisor-login-wrapper">
+
+
+        <!-- =================================
+             LEFT BRANDING
+             ================================= -->
+
+        <div class="advisor-brand-section">
+
+            <div class="advisor-brand-content">
+
+                <div class="advisor-brand-icon">
+                    🚗
+                </div>
+
+                <div class="advisor-brand-tag">
+                    Service Operations
+                </div>
+
+                <h1 class="advisor-brand-title">
+                    Vehicle Service<br>
+                    Management
+                </h1>
+
+                <p class="advisor-brand-description">
+                    Manage customer service requests,
+                    appointments, service progress, and
+                    earnings from one place.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             ADVISOR LOGIN
+             ================================= -->
+
+        <div class="advisor-login-section">
+
+
+            <div class="advisor-login-header">
+
+                <div class="advisor-login-label">
+                    Service Advisor Access
+                </div>
+
+                <h2 class="advisor-login-title">
+                    🧑‍💼 Service Advisor Login
+                </h2>
+
+                <p class="advisor-login-subtitle">
+                    Login to manage customer service requests
+                    and view your earnings.
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <p class="advisor-message">
+                        {{ message }}
+                    </p>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="advisor-form-group">
+
+                    <label for="advisor-username">
+                        Advisor Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="advisor-username"
+                        name="username"
+                        placeholder="Enter advisor username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="advisor-form-group">
+
+                    <label for="advisor-password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="advisor-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="advisor-login-button"
+                >
+                    Advisor Login
+                </button>
+
+            </form>
+
+
+            <!-- BACK TO MAIN LOGIN -->
+
+            <div class="advisor-back">
+
+                Not an advisor?
+
+                <a href="{% url 'login' %}">
+                    Go back to Customer Login
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

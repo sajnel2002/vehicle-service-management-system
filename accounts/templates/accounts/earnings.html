@@ -1,0 +1,392 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Advisor Earnings | Vehicle Service Management System{% endblock %}
+
+{% block content %}
+
+<style>
+    .earnings-page {
+        padding: 10px 0 40px;
+    }
+
+    .earnings-hero {
+        background: linear-gradient(135deg, #0f4c81, #123b63);
+        color: #ffffff;
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(15, 76, 129, 0.18);
+    }
+
+    .earnings-hero .eyebrow {
+        color: #bfdbfe;
+        margin-bottom: 8px;
+    }
+
+    .earnings-hero h1 {
+        margin: 0 0 8px;
+        font-size: clamp(32px, 5vw, 44px);
+        font-weight: 800;
+    }
+
+    .earnings-hero p:last-child {
+        margin: 0;
+        color: #dbeafe;
+        font-size: 15px;
+    }
+
+    .earnings-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .summary-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 21px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .summary-label {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin-bottom: 8px;
+    }
+
+    .summary-value {
+        color: #0f172a;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .summary-note {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .earnings-panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+    }
+
+    .panel-header {
+        padding: 21px 23px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .panel-header h2 {
+        margin: 0 0 5px;
+        color: #0f172a;
+        font-size: 20px;
+    }
+
+    .panel-header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    .earnings-table {
+        width: 100%;
+        min-width: 750px;
+        border-collapse: collapse;
+    }
+
+    .earnings-table th {
+        padding: 15px 17px;
+        text-align: left;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        color: #475569;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        white-space: nowrap;
+    }
+
+    .earnings-table td {
+        padding: 17px;
+        border-bottom: 1px solid #eef2f7;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .earnings-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    .customer-name {
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .service-name {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .total-amount {
+        font-weight: 700;
+        color: #0f172a;
+        white-space: nowrap;
+    }
+
+    .advisor-amount {
+        font-weight: 800;
+        color: #15803d;
+        white-space: nowrap;
+    }
+
+    .paid-date {
+        color: #64748b;
+        white-space: nowrap;
+    }
+
+    .success-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #dcfce7;
+        color: #166534;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 65px 25px;
+    }
+
+    .empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: #eff6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 8px;
+        color: #0f172a;
+        font-size: 20px;
+    }
+
+    .empty-state p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+        .earnings-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .earnings-page {
+            padding-bottom: 25px;
+        }
+
+        .earnings-hero {
+            padding: 25px 20px;
+            border-radius: 16px;
+        }
+
+        .earnings-hero h1 {
+            font-size: 32px;
+        }
+
+        .summary-card {
+            padding: 18px;
+        }
+
+        .earnings-panel {
+            border-radius: 14px;
+        }
+
+        .panel-header {
+            padding: 18px;
+        }
+    }
+</style>
+
+<section class="earnings-page">
+
+    <!-- Earnings Hero -->
+    <section class="earnings-hero">
+        <p class="eyebrow">Advisor Finance</p>
+
+        <h1>₹{{ total_earnings }} earned</h1>
+
+        <p>
+            Your earnings are calculated as 90% of each successful customer payment.
+        </p>
+    </section>
+
+
+    {% if payments %}
+
+    <!-- Summary -->
+    <section class="earnings-summary">
+
+        <div class="summary-card">
+            <div class="summary-label">Total Earnings</div>
+            <div class="summary-value">
+                ₹{{ total_earnings }}
+            </div>
+            <div class="summary-note">
+                Your 90% share
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Successful Payments</div>
+            <div class="summary-value">
+                {{ payments|length }}
+            </div>
+            <div class="summary-note">
+                Completed transactions
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Platform Fee</div>
+            <div class="summary-value">
+                10%
+            </div>
+            <div class="summary-note">
+                Retained by platform
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- Earnings Records -->
+    <section class="earnings-panel">
+
+        <div class="panel-header">
+            <h2>Earnings Records</h2>
+
+            <p>
+                Successful service payments associated with your appointments.
+            </p>
+        </div>
+
+        <div class="table-wrap">
+
+            <table class="earnings-table">
+
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Total Payment</th>
+                        <th>Your Earnings</th>
+                        <th>Payment Status</th>
+                        <th>Paid Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for payment in payments %}
+
+                    <tr>
+
+                        <td>
+                            <span class="customer-name">
+                                {{ payment.customer.username }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="service-name">
+                                {{ payment.booking.service.name }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="total-amount">
+                                ₹{{ payment.total_amount }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="advisor-amount">
+                                ₹{{ payment.advisor_earnings }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="success-badge">
+                                ● Successful
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="paid-date">
+                                {{ payment.paid_at|date:'d M Y' }}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    {% else %}
+
+    <!-- Empty State -->
+    <section class="earnings-panel">
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                💰
+            </div>
+
+            <h3>No Earnings Yet</h3>
+
+            <p>
+                Your successful service payments will appear here once customers complete their payments.
+            </p>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

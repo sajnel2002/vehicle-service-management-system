@@ -1,0 +1,667 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Vehicle Service Management System</title>
+
+    <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+
+    <style>
+        /* ================================
+           LOGIN PAGE ONLY
+           ================================ */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #06152f, #0b2b57, #06152f);
+            color: #172033;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 1050px;
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        /* ================================
+           LEFT BRANDING SECTION
+           ================================ */
+
+        .brand-section {
+            background: linear-gradient(145deg, #09204a, #0b376f);
+            color: white;
+            padding: 55px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-section::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            top: -100px;
+            right: -100px;
+        }
+
+        .brand-section::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            bottom: -80px;
+            left: -70px;
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+        }
+
+        .brand-tag {
+            color: #62b7ff;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .brand-title {
+            font-size: 36px;
+            line-height: 1.15;
+            margin: 0 0 18px;
+            font-weight: 700;
+        }
+
+        .brand-description {
+            color: #d5e4f7;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        .brand-features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #edf5ff;
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ================================
+           RIGHT LOGIN SECTION
+           ================================ */
+
+        .login-section {
+            background: #ffffff;
+            padding: 45px 50px;
+        }
+
+        .login-header {
+            margin-bottom: 28px;
+        }
+
+        .login-label {
+            color: #1769d1;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .login-title {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: #172033;
+        }
+
+        .login-subtitle {
+            margin: 0;
+            color: #687386;
+            font-size: 14px;
+        }
+
+        /* Messages */
+
+        .message {
+            padding: 11px 14px;
+            border-radius: 9px;
+            background: #eef6ff;
+            color: #174f8f;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        /* Form */
+
+        .login-form {
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #263247;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #d7e0ec;
+            border-radius: 9px;
+            background: #f9fbfd;
+            font-size: 14px;
+            color: #172033;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #2176d2;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(33, 118, 210, 0.10);
+        }
+
+        /* Buttons */
+
+        .primary-button,
+        .secondary-button {
+            width: 100%;
+            height: 48px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .primary-button {
+            background: linear-gradient(90deg, #1769d1, #2396dc);
+            color: white;
+            box-shadow: 0 7px 18px rgba(23, 105, 209, 0.20);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(23, 105, 209, 0.28);
+        }
+
+        .secondary-button {
+            background: #f3f7fc;
+            color: #19559a;
+            border: 1px solid #dce6f2;
+        }
+
+        .secondary-button:hover {
+            background: #eaf2fb;
+            border-color: #c8d9ec;
+        }
+
+        /* Customer registration */
+
+        .register-text {
+            text-align: center;
+            color: #687386;
+            font-size: 13px;
+            margin: 16px 0 24px;
+        }
+
+        .register-text a {
+            color: #1859a5;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ================================
+           OTHER LOGIN OPTIONS
+           ================================ */
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0 24px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            height: 1px;
+            background: #e1e6ed;
+            flex: 1;
+        }
+
+        .divider span {
+            color: #98a2b3;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .access-section {
+            margin-bottom: 22px;
+        }
+
+        .access-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .access-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            background: #edf5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .access-title {
+            margin: 0;
+            font-size: 16px;
+            color: #1d2a40;
+        }
+
+        .access-description {
+            margin: 0 0 12px 45px;
+            color: #7a8494;
+            font-size: 12px;
+        }
+
+        .access-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .access-actions.single {
+            grid-template-columns: 1fr;
+        }
+
+        /* ================================
+           RESPONSIVE
+           ================================ */
+
+        @media (max-width: 850px) {
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .brand-section {
+                padding: 35px 35px;
+                text-align: center;
+            }
+
+            .brand-icon {
+                font-size: 45px;
+                margin-bottom: 10px;
+            }
+
+            .brand-title {
+                font-size: 30px;
+            }
+
+            .brand-description {
+                margin-bottom: 20px;
+            }
+
+            .brand-features {
+                display: none;
+            }
+
+            .login-section {
+                padding: 35px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .login-page {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            .login-wrapper {
+                margin-top: 10px;
+                border-radius: 18px;
+            }
+
+            .brand-section {
+                padding: 28px 22px;
+            }
+
+            .brand-title {
+                font-size: 25px;
+            }
+
+            .login-section {
+                padding: 28px 22px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+
+            .access-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .access-description {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="login-wrapper">
+
+        <!-- ================================
+             BRANDING
+             ================================ -->
+
+        <div class="brand-section">
+
+            <div class="brand-content">
+
+                <div class="brand-icon">🚗</div>
+
+                <div class="brand-tag">
+                    Automotive Care
+                </div>
+
+                <h1 class="brand-title" style="color: #ffffff !important;">
+    Vehicle Service<br>
+    Management
+</h1>
+
+                <p class="brand-description">
+                    Manage your vehicle service appointments,
+                    track repairs, and stay updated with your
+                    service progress — all in one place.
+                </p>
+
+                <div class="brand-features">
+
+                    <div class="feature">
+                        <span class="feature-icon">✓</span>
+                        Easy Service Booking
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">✓</span>
+                        Real-time Service Tracking
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">✓</span>
+                        Secure Service Management
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================
+             LOGIN
+             ================================ -->
+
+        <div class="login-section">
+
+            <div class="login-header">
+
+                <div class="login-label">
+                    Welcome Back
+                </div>
+
+                <h2 class="login-title">
+                    Customer Login
+                </h2>
+
+                <p class="login-subtitle">
+                    Sign in to manage your vehicle services.
+                </p>
+
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="message">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- CUSTOMER LOGIN -->
+
+            <form method="POST" class="login-form">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Customer Login
+                </button>
+
+            </form>
+
+
+            <p class="register-text">
+
+                New customer?
+
+                <a href="{% url 'register' %}">
+                    Create an account
+                </a>
+
+            </p>
+
+
+            <div class="divider">
+                <span>Other Access</span>
+            </div>
+
+
+            <!-- SERVICE ADVISOR -->
+
+            <div class="access-section">
+
+                <div class="access-header">
+
+                    <div class="access-icon">
+                        🧑‍💼
+                    </div>
+
+                    <h3 class="access-title">
+                        Service Advisor
+                    </h3>
+
+                </div>
+
+                <p class="access-description">
+                    Manage customer bookings and service operations.
+                </p>
+
+                <div class="access-actions">
+
+                    <a
+                        href="{% url 'advisor_login' %}"
+                        class="secondary-button"
+                    >
+                        Advisor Login
+                    </a>
+
+                    <a
+                        href="{% url 'advisor_register' %}"
+                        class="secondary-button"
+                    >
+                        Register as Advisor
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN -->
+
+            <div class="access-section">
+
+                <div class="access-header">
+
+                    <div class="access-icon">
+                        👨‍💻
+                    </div>
+
+                    <h3 class="access-title">
+                        Administrator
+                    </h3>
+
+                </div>
+
+                <p class="access-description">
+                    Administrator access only.
+                </p>
+
+                <div class="access-actions single">
+
+                    <a
+                        href="{% url 'admin_login' %}"
+                        class="secondary-button"
+                    >
+                        Admin Login
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

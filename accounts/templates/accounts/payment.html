@@ -1,0 +1,501 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure Payment | Vehicle Service Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: #071b3a;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .secure-badge {
+            font-size: 14px;
+            color: #dce9ff;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1050px;
+            margin: 45px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 32px;
+            color: #071b3a;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #687386;
+            font-size: 15px;
+        }
+
+        .payment-layout {
+            display: grid;
+            grid-template-columns: 1fr 390px;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(20, 45, 80, 0.08);
+            border: 1px solid #e7edf5;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            color: #071b3a;
+            margin-bottom: 22px;
+        }
+
+        .details {
+            display: grid;
+            gap: 17px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #697586;
+            font-size: 14px;
+        }
+
+        .value {
+            color: #172033;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .amount-box {
+            background: #f5f8ff;
+            border: 1px solid #dce8ff;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .amount-label {
+            color: #667085;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .amount {
+            color: #071b3a;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .payment-status {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .razorpay-section {
+            text-align: center;
+        }
+
+        .razorpay-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1682f7;
+            margin-bottom: 10px;
+        }
+
+        .secure-text {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .pay-button {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 20px;
+            background: #1677ff;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .pay-button:hover {
+            background: #095fd8;
+            transform: translateY(-1px);
+        }
+
+        .pay-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .razorpay-only {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #7b8494;
+        }
+
+        .error-box {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #9f1239;
+            border-radius: 12px;
+            padding: 15px;
+            line-height: 1.5;
+            margin-top: 18px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            color: #1677ff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .payment-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+                margin: 30px auto;
+            }
+
+            .topbar {
+                padding: 16px 4%;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .secure-badge {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .card {
+                padding: 20px;
+            }
+
+            .page-heading h1 {
+                font-size: 26px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .value {
+                text-align: left;
+            }
+
+            .amount {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand">Vehicle Service Management</div>
+        <div class="secure-badge">🔒 Secure Payment</div>
+    </div>
+
+    <div class="container">
+
+        <div class="page-heading">
+            <h1>Complete Your Payment</h1>
+            <p>Review your service booking and pay securely through Razorpay.</p>
+        </div>
+
+        <div class="payment-layout">
+
+            <!-- Booking Details -->
+            <div class="card">
+                <h2>Booking Summary</h2>
+
+                <div class="details">
+
+                    <div class="detail-row">
+                        <span class="label">Vehicle</span>
+                        <span class="value">
+                            {{ booking.vehicle.vehicle_number }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Location</span>
+                        <span class="value">
+                            {{ booking.location }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Service</span>
+                        <span class="value">
+                            {{ booking.service.name }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Service Amount</span>
+                        <span class="value">
+                            ₹{{ payment.total_amount }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Platform Fee</span>
+                        <span class="value">
+                            ₹{{ payment.platform_fee }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Advisor Earnings</span>
+                        <span class="value">
+                            ₹{{ payment.advisor_earnings }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="label">Payment Status</span>
+                        <span class="value">
+                            <span class="payment-status">
+                                {{ payment.payment_status }}
+                            </span>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Razorpay Payment -->
+            <div class="card razorpay-section">
+
+                <div class="razorpay-logo">
+                    Razorpay
+                </div>
+
+                <h2>Secure Online Payment</h2>
+
+                <div class="amount-box">
+                    <div class="amount-label">Total Payable</div>
+
+                    <div class="amount">
+                        ₹{{ payment.total_amount }}
+                    </div>
+                </div>
+
+                {% if payment.payment_status == 'SUCCESS' %}
+
+                    <p class="secure-text">
+                        Your Razorpay payment was verified successfully.
+                    </p>
+
+                {% elif razorpay_enabled and razorpay_order_id %}
+
+                    <p class="secure-text">
+                        You will be redirected to Razorpay's secure checkout
+                        where you can complete the payment using the available
+                        test payment options.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="pay-button"
+                        class="pay-button"
+                    >
+                        Pay ₹{{ payment.total_amount }}
+                    </button>
+
+                    <p class="razorpay-only">
+                        🔐 Payment processed securely by Razorpay Test Mode
+                    </p>
+
+                {% else %}
+
+                    <div class="error-box">
+                        <strong>Razorpay is not available.</strong><br>
+                        The Razorpay Test API configuration could not be
+                        loaded. Please check your Django settings and restart
+                        the server.
+                    </div>
+
+                {% endif %}
+
+                <a
+                    href="{% url 'booking_detail' booking.id %}"
+                    class="back-link"
+                >
+                    ← Back to Booking
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% if razorpay_enabled and razorpay_order_id and payment.payment_status != 'SUCCESS' %}
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        const payButton = document.getElementById("pay-button");
+
+        payButton.addEventListener("click", function () {
+
+            payButton.disabled = true;
+            payButton.innerText = "Opening Razorpay...";
+
+            const options = {
+                key: "{{ razorpay_key_id }}",
+
+                amount: "{{ razorpay_amount }}",
+
+                currency: "{{ razorpay_currency }}",
+
+                name: "Vehicle Service Management",
+
+                description: "{{ booking.service.name }} Service",
+
+                order_id: "{{ razorpay_order_id }}",
+
+                handler: function (response) {
+
+                    const form = document.createElement("form");
+
+                    form.method = "POST";
+                    form.action = "{% url 'razorpay_payment_success' booking.id %}";
+
+                    const csrfToken = document.createElement("input");
+                    csrfToken.type = "hidden";
+                    csrfToken.name = "csrfmiddlewaretoken";
+                    csrfToken.value = "{{ csrf_token }}";
+
+                    form.appendChild(csrfToken);
+
+                    const paymentId = document.createElement("input");
+                    paymentId.type = "hidden";
+                    paymentId.name = "razorpay_payment_id";
+                    paymentId.value = response.razorpay_payment_id;
+
+                    form.appendChild(paymentId);
+
+                    const orderId = document.createElement("input");
+                    orderId.type = "hidden";
+                    orderId.name = "razorpay_order_id";
+                    orderId.value = response.razorpay_order_id;
+
+                    form.appendChild(orderId);
+
+                    const signature = document.createElement("input");
+                    signature.type = "hidden";
+                    signature.name = "razorpay_signature";
+                    signature.value = response.razorpay_signature;
+
+                    form.appendChild(signature);
+
+                    document.body.appendChild(form);
+
+                    form.submit();
+                },
+
+                prefill: {
+                    name: "{{ request.user.get_full_name|default:request.user.username }}",
+                    email: "{{ request.user.email }}"
+                },
+
+                theme: {
+                    color: "#1677ff"
+                }
+            };
+
+            const razorpay = new Razorpay(options);
+
+            razorpay.on("payment.failed", function () {
+
+                payButton.disabled = false;
+                payButton.innerText = "Pay ₹{{ payment.total_amount }}";
+
+                alert(
+                    "Payment failed. Please try again."
+                );
+            });
+
+            razorpay.open();
+        });
+    </script>
+
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,839 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}
+Book a Service | Vehicle Service Management System
+{% endblock %}
+
+{% block content %}
+
+<section class="hero compact">
+    <p class="eyebrow">New appointment</p>
+
+    <h1>Book Your Vehicle Service</h1>
+
+    <p>
+        Choose your vehicle, service, preferred advisor,
+        location and available appointment slot.
+    </p>
+</section>
+
+
+<form class="panel booking-form" method="post">
+
+    {% csrf_token %}
+
+
+    <!-- ============================= -->
+    <!-- 1. VEHICLE DETAILS -->
+    <!-- ============================= -->
+
+    <div class="form-section">
+
+        <h2>1. Vehicle Details</h2>
+
+        <div class="form-grid">
+
+            <p>
+                <label for="vehicle-number">
+                    Vehicle Number
+                </label>
+
+                <input
+                    id="vehicle-number"
+                    type="text"
+                    name="vehicle_number"
+                    required
+                    placeholder="e.g. KL 07 AB 1234"
+                >
+            </p>
+
+
+            <p>
+                <label for="vehicle-model">
+                    Vehicle Model
+                </label>
+
+                <input
+                    id="vehicle-model"
+                    type="text"
+                    name="vehicle_model"
+                    required
+                    placeholder="e.g. Nexon, City, Activa"
+                >
+            </p>
+
+
+            <p>
+                <label for="vehicle-type">
+                    Vehicle Type
+                </label>
+
+                <select
+                    id="vehicle-type"
+                    name="vehicle_type"
+                    required
+                >
+
+                    <option value="">
+                        Select vehicle type
+                    </option>
+
+                    <option value="Car">
+                        Car
+                    </option>
+
+                    <option value="SUV">
+                        SUV
+                    </option>
+
+                    <option value="Bike">
+                        Bike
+                    </option>
+
+                    <option value="Commercial Vehicle">
+                        Commercial Vehicle
+                    </option>
+
+                </select>
+            </p>
+
+
+            <p>
+                <label for="manufacturing-year">
+                    Manufacturing Year
+                </label>
+
+                <input
+                    id="manufacturing-year"
+                    type="number"
+                    name="year"
+                    min="1990"
+                    max="2030"
+                    required
+                    placeholder="2022"
+                >
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- 2. SERVICE -->
+    <!-- ============================= -->
+
+    <div class="form-section">
+
+        <h2>2. Select Service</h2>
+
+        <p class="section-help">
+            Choose the service package required for your vehicle.
+        </p>
+
+
+        <div class="service-options">
+
+            {% for service in services %}
+
+            <label class="service-option">
+
+                <input
+                    type="radio"
+                    name="service"
+                    value="{{ service.id }}"
+                    required
+                >
+
+                <span>
+
+                    <strong>
+                        {{ service.name }}
+                    </strong>
+
+                    <small>
+                        {{ service.description }}
+                    </small>
+
+                </span>
+
+                <b>
+                    ₹{{ service.price }}
+                </b>
+
+            </label>
+
+            {% empty %}
+
+            <p>
+                No services are currently configured.
+                Please contact the workshop.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- 3. APPOINTMENT DETAILS -->
+    <!-- ============================= -->
+
+    <div class="form-section">
+
+        <h2>3. Appointment Details</h2>
+
+        <p class="section-help">
+            Appointments must be booked more than 2 hours
+            before the selected time slot.
+        </p>
+
+
+        <div class="form-grid">
+
+
+            <!-- SERVICE ADVISOR -->
+
+            <p>
+
+                <label for="advisor-select">
+                    Service Advisor
+                </label>
+
+                <select
+                    id="advisor-select"
+                    name="advisor"
+                    required
+                >
+
+                    <option value="">
+                        Select a Service Advisor
+                    </option>
+
+
+                    {% for advisor in advisors %}
+
+                    <option value="{{ advisor.id }}">
+                        {{ advisor.get_full_name|default:advisor.username }}
+                    </option>
+
+                    {% empty %}
+
+                    <option
+                        value=""
+                        disabled
+                    >
+                        No approved advisors are available
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </p>
+
+
+
+            <!-- LOCATION -->
+
+            <p>
+
+                <label for="location">
+                    Service Location / City
+                </label>
+
+                <input
+                    id="location"
+                    type="text"
+                    name="location"
+                    list="indian-cities"
+                    required
+                    autocomplete="off"
+                    placeholder="Start typing your city"
+                >
+
+                <small class="field-help">
+                    Select your city from the suggestions.
+                </small>
+
+            </p>
+
+
+
+            <!-- DATE -->
+
+            <p>
+
+                <label for="booking-date">
+                    Preferred Date
+                </label>
+
+                <input
+                    id="booking-date"
+                    type="date"
+                    name="booking_date"
+                    min="{{ today }}"
+                    required
+                >
+
+            </p>
+
+
+
+            <!-- TIME -->
+
+            <p>
+
+                <label for="booking-time">
+                    Available Time Slot
+                </label>
+
+                <select
+                    id="booking-time"
+                    name="booking_time"
+                    required
+                    disabled
+                >
+
+                    <option value="">
+                        Select advisor and date first
+                    </option>
+
+                </select>
+
+            </p>
+
+        </div>
+
+
+        <p
+            id="slot-message"
+            class="slot-message"
+            aria-live="polite"
+        >
+            Please select a Service Advisor and appointment date.
+        </p>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- 4. PROBLEM DESCRIPTION -->
+    <!-- ============================= -->
+
+    <div class="form-section">
+
+        <h2>4. Problem Description</h2>
+
+        <p class="section-help">
+            Tell the service advisor what needs to be checked
+            or repaired.
+        </p>
+
+
+        <p>
+
+            <label for="problem-description">
+                Describe Your Problem
+            </label>
+
+            <textarea
+                id="problem-description"
+                name="problem_description"
+                rows="5"
+                required
+                placeholder="Example: Engine making unusual noise, brake issue, AC not cooling..."
+            ></textarea>
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- ACTIONS -->
+    <!-- ============================= -->
+
+    <div class="booking-actions">
+
+        <button
+            class="button"
+            type="submit"
+        >
+            Confirm Appointment
+        </button>
+
+
+        <a
+            class="button secondary"
+            href="{% url 'dashboard' %}"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</form>
+
+
+
+<!-- ================================================= -->
+<!-- INDIAN CITY LIST -->
+<!-- ================================================= -->
+
+<datalist id="indian-cities">
+
+    <!-- Kerala -->
+
+    <option value="Kochi">
+    <option value="Thiruvananthapuram">
+    <option value="Kozhikode">
+    <option value="Kollam">
+    <option value="Thrissur">
+    <option value="Kannur">
+    <option value="Alappuzha">
+    <option value="Kottayam">
+    <option value="Palakkad">
+    <option value="Malappuram">
+    <option value="Kasaragod">
+    <option value="Pathanamthitta">
+    <option value="Idukki">
+    <option value="Wayanad">
+
+    <!-- Maharashtra -->
+
+    <option value="Mumbai">
+    <option value="Pune">
+    <option value="Nagpur">
+    <option value="Nashik">
+    <option value="Aurangabad">
+    <option value="Thane">
+    <option value="Navi Mumbai">
+    <option value="Kolhapur">
+    <option value="Solapur">
+    <option value="Amravati">
+    <option value="Akola">
+    <option value="Ahmednagar">
+    <option value="Satara">
+    <option value="Sangli">
+    <option value="Jalgaon">
+    <option value="Dhule">
+    <option value="Latur">
+    <option value="Nanded">
+    <option value="Ratnagiri">
+
+    <!-- Karnataka -->
+
+    <option value="Bengaluru">
+    <option value="Mysuru">
+    <option value="Mangaluru">
+    <option value="Hubballi">
+    <option value="Dharwad">
+    <option value="Belagavi">
+    <option value="Kalaburagi">
+    <option value="Ballari">
+    <option value="Shivamogga">
+    <option value="Tumakuru">
+    <option value="Udupi">
+    <option value="Hassan">
+    <option value="Davangere">
+    <option value="Vijayapura">
+    <option value="Raichur">
+
+    <!-- Tamil Nadu -->
+
+    <option value="Chennai">
+    <option value="Coimbatore">
+    <option value="Madurai">
+    <option value="Tiruchirappalli">
+    <option value="Salem">
+    <option value="Tiruppur">
+    <option value="Erode">
+    <option value="Vellore">
+    <option value="Thoothukudi">
+    <option value="Tirunelveli">
+    <option value="Thanjavur">
+    <option value="Dindigul">
+    <option value="Nagercoil">
+    <option value="Karur">
+    <option value="Kanchipuram">
+    <option value="Cuddalore">
+    <option value="Hosur">
+
+    <!-- Andhra Pradesh -->
+
+    <option value="Visakhapatnam">
+    <option value="Vijayawada">
+    <option value="Guntur">
+    <option value="Nellore">
+    <option value="Kurnool">
+    <option value="Rajahmundry">
+    <option value="Tirupati">
+    <option value="Kadapa">
+    <option value="Anantapur">
+    <option value="Eluru">
+    <option value="Ongole">
+
+    <!-- Telangana -->
+
+    <option value="Hyderabad">
+    <option value="Warangal">
+    <option value="Nizamabad">
+    <option value="Karimnagar">
+    <option value="Khammam">
+    <option value="Ramagundam">
+    <option value="Mahbubnagar">
+    <option value="Nalgonda">
+
+    <!-- Delhi -->
+
+    <option value="New Delhi">
+    <option value="Delhi">
+
+    <!-- Gujarat -->
+
+    <option value="Ahmedabad">
+    <option value="Surat">
+    <option value="Vadodara">
+    <option value="Rajkot">
+    <option value="Bhavnagar">
+    <option value="Jamnagar">
+    <option value="Gandhinagar">
+    <option value="Junagadh">
+    <option value="Anand">
+    <option value="Bharuch">
+    <option value="Navsari">
+    <option value="Valsad">
+
+    <!-- Rajasthan -->
+
+    <option value="Jaipur">
+    <option value="Jodhpur">
+    <option value="Udaipur">
+    <option value="Kota">
+    <option value="Ajmer">
+    <option value="Bikaner">
+    <option value="Alwar">
+    <option value="Bharatpur">
+    <option value="Sikar">
+    <option value="Sri Ganganagar">
+
+    <!-- Uttar Pradesh -->
+
+    <option value="Lucknow">
+    <option value="Kanpur">
+    <option value="Ghaziabad">
+    <option value="Agra">
+    <option value="Varanasi">
+    <option value="Prayagraj">
+    <option value="Meerut">
+    <option value="Noida">
+    <option value="Bareilly">
+    <option value="Aligarh">
+    <option value="Moradabad">
+    <option value="Saharanpur">
+    <option value="Gorakhpur">
+    <option value="Mathura">
+    <option value="Ayodhya">
+
+    <!-- West Bengal -->
+
+    <option value="Kolkata">
+    <option value="Howrah">
+    <option value="Durgapur">
+    <option value="Asansol">
+    <option value="Siliguri">
+    <option value="Darjeeling">
+    <option value="Kharagpur">
+
+    <!-- Madhya Pradesh -->
+
+    <option value="Bhopal">
+    <option value="Indore">
+    <option value="Gwalior">
+    <option value="Jabalpur">
+    <option value="Ujjain">
+    <option value="Sagar">
+    <option value="Dewas">
+    <option value="Satna">
+    <option value="Ratlam">
+
+    <!-- Bihar -->
+
+    <option value="Patna">
+    <option value="Gaya">
+    <option value="Bhagalpur">
+    <option value="Muzaffarpur">
+    <option value="Purnia">
+    <option value="Darbhanga">
+    <option value="Bihar Sharif">
+
+    <!-- Odisha -->
+
+    <option value="Bhubaneswar">
+    <option value="Cuttack">
+    <option value="Rourkela">
+    <option value="Berhampur">
+    <option value="Sambalpur">
+    <option value="Puri">
+    <option value="Balasore">
+
+    <!-- Punjab -->
+
+    <option value="Amritsar">
+    <option value="Ludhiana">
+    <option value="Jalandhar">
+    <option value="Patiala">
+    <option value="Bathinda">
+    <option value="Mohali">
+    <option value="Pathankot">
+
+    <!-- Haryana -->
+
+    <option value="Gurugram">
+    <option value="Faridabad">
+    <option value="Panipat">
+    <option value="Ambala">
+    <option value="Hisar">
+    <option value="Rohtak">
+    <option value="Karnal">
+    <option value="Sonipat">
+
+    <!-- Jharkhand -->
+
+    <option value="Ranchi">
+    <option value="Jamshedpur">
+    <option value="Dhanbad">
+    <option value="Bokaro">
+    <option value="Deoghar">
+    <option value="Hazaribagh">
+
+    <!-- Chhattisgarh -->
+
+    <option value="Raipur">
+    <option value="Bhilai">
+    <option value="Bilaspur">
+    <option value="Korba">
+    <option value="Durg">
+
+    <!-- Assam -->
+
+    <option value="Guwahati">
+    <option value="Dibrugarh">
+    <option value="Silchar">
+    <option value="Jorhat">
+    <option value="Tezpur">
+
+    <!-- Uttarakhand -->
+
+    <option value="Dehradun">
+    <option value="Haridwar">
+    <option value="Rishikesh">
+    <option value="Haldwani">
+    <option value="Nainital">
+    <option value="Roorkee">
+
+    <!-- Himachal Pradesh -->
+
+    <option value="Shimla">
+    <option value="Dharamshala">
+    <option value="Solan">
+    <option value="Mandi">
+    <option value="Kullu">
+
+    <!-- Goa -->
+
+    <option value="Panaji">
+    <option value="Vasco da Gama">
+    <option value="Margao">
+    <option value="Mapusa">
+
+    <!-- Jammu and Kashmir -->
+
+    <option value="Srinagar">
+    <option value="Jammu">
+    <option value="Anantnag">
+    <option value="Baramulla">
+
+    <!-- Other major cities -->
+
+    <option value="Chandigarh">
+    <option value="Puducherry">
+    <option value="Mysore">
+    <option value="Port Blair">
+    <option value="Gangtok">
+    <option value="Shillong">
+    <option value="Imphal">
+    <option value="Aizawl">
+    <option value="Kohima">
+    <option value="Itanagar">
+    <option value="Agartala">
+    <option value="Bikaner">
+    <option value="Leh">
+    <option value="Siliguri">
+
+</datalist>
+
+
+
+<!-- ================================================= -->
+<!-- BOOKING PAGE SCRIPT -->
+<!-- ================================================= -->
+
+<script>
+
+const advisorSelect =
+    document.getElementById('advisor-select');
+
+const dateInput =
+    document.getElementById('booking-date');
+
+const timeSelect =
+    document.getElementById('booking-time');
+
+const slotMessage =
+    document.getElementById('slot-message');
+
+
+
+function setSlots(slots, message) {
+
+    timeSelect.innerHTML = '';
+
+
+    if (!slots.length) {
+
+        timeSelect.disabled = true;
+
+        timeSelect.add(
+            new Option(
+                'No available time slots',
+                ''
+            )
+        );
+
+
+        slotMessage.textContent =
+            message ||
+            'No appointment slots are available for this advisor on this date. Please select another date or advisor.';
+
+        return;
+    }
+
+
+    timeSelect.disabled = false;
+
+
+    timeSelect.add(
+        new Option(
+            'Select an available time slot',
+            ''
+        )
+    );
+
+
+    slots.forEach(function(slot) {
+
+        timeSelect.add(
+            new Option(
+                slot.label,
+                slot.value
+            )
+        );
+
+    });
+
+
+    slotMessage.textContent =
+        'Choose from the available time slots below.';
+
+}
+
+
+
+async function refreshSlots() {
+
+    if (
+        !advisorSelect.value ||
+        !dateInput.value
+    ) {
+
+        setSlots(
+            [],
+            !advisorSelect.value
+                ? 'Please select a Service Advisor.'
+                : 'Please select an appointment date.'
+        );
+
+        return;
+    }
+
+
+    timeSelect.disabled = true;
+
+
+    timeSelect.innerHTML =
+        '<option>Checking availability...</option>';
+
+
+    slotMessage.textContent =
+        'Checking available time slots...';
+
+
+    try {
+
+        const response = await fetch(
+            '{% url "available_booking_slots" %}?advisor=' +
+            encodeURIComponent(advisorSelect.value) +
+            '&date=' +
+            encodeURIComponent(dateInput.value),
+            {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        setSlots(
+            data.available_slots || [],
+            data.message
+        );
+
+
+    } catch (error) {
+
+        setSlots(
+            [],
+            'Unable to check slots right now. Please try again.'
+        );
+
+    }
+
+}
+
+
+
+advisorSelect.addEventListener(
+    'change',
+    refreshSlots
+);
+
+
+dateInput.addEventListener(
+    'change',
+    refreshSlots
+);
+
+</script>
+
+{% endblock %}
